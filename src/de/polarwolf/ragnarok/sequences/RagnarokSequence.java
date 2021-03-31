@@ -69,7 +69,7 @@ public class RagnarokSequence {
 			 plugin.getLogger().warning("Cannot start sequence - another sequence is already running");
 			return false;
 		}
-		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_SHUTDOWN);
+		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_SHUTDOWN, null);
 		if (sqRunResult.hasError()) {
 			 plugin.getLogger().warning(sqRunResult.toString());
 		 }
@@ -89,7 +89,7 @@ public class RagnarokSequence {
 	}
 
 	public boolean startCancelSequence() {
-		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_CANCEL);
+		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_CANCEL, null);
 		if (sqRunResult.hasError()) {
 			 plugin.getLogger().warning(sqRunResult.toString());
 		 }
