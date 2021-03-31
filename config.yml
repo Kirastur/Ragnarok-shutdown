@@ -1,0 +1,82 @@
+#
+# Welcome to the Ragnarök configuration settings
+#
+# Please contact us at discord if you have any questions
+#   https://discord.gg/MBJjqUHQHR
+#
+#
+
+general:
+
+  # Should Ragnarök exposes its API to other plugins
+  #
+  # - If enabled, other Plugins can get an API object by using
+  # -  "RagnarokAPI ragnarokAPI = RagnarokProvider.getAPI();"
+  enable-api: true
+
+  # - Should the dangerous actions (block-new-logins, kickall, shutdown) be private
+  # - so they cannot be used outside the sequence definitions here
+  actions-are-private: true
+
+
+protection:
+
+  # - To lure out Ragnarök at least one player with the
+  # - named permission must stay in the named WorlGuard region
+  # - when the Ragnerök-command is executed.
+  # -
+  # - If this fails, nothing happens
+  
+  # - The Region must be defined in WorldGuard.
+  # - The flags of the region do not matter (e.g. passthrough).   
+  region: ragnarok
+  
+  # - Permission check is done by regular mincecraft permisson system.
+  # - The permission name also is hard coded in plugin.yml
+  # - so please change it here only if you know what you are doing.
+  permission: ragnarök.acolyte
+  
+  
+sequences:
+
+  # -  Define the sequence how to celebrate the end of all things 
+  shutdown:
+    1:
+      action: command
+      command: tellraw @a {"text":"Ragnarök is comming", "color":"gold"}
+    2: 
+      action: broadcast
+      message: The server will stop in 1 minute
+      wait-after-action: 30
+    3:
+      action: block-new-logins
+    4:
+      action: titlebroadcast
+      title: The server will stop
+      subtitle: in 30 seconds
+      seconds: 5
+      wait-after-action: 10
+    5:
+      action: broadcast
+      message: The server will stop in 20 seconds
+      wait-after-action: 10
+    6:
+      action: broadcast
+      message: The server will stop in 10 seconds
+      wait-after-action: 10
+    7:
+      action: kickall
+      wait-after-action: 3
+    8:
+      action: shutdown
+
+
+  # -  Notify players that Ragnarök is cancelled 
+  cancel:
+    1:
+      action: command
+      command: tellraw @a {"text":"Ragnarök went back to his bed", "color":"gold"}
+    2: 
+      action: broadcast
+      message: The server-shutdown was cancelled
+ 

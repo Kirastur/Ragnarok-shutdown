@@ -1,0 +1,61 @@
+name: Ragnarok
+version: 1.0
+description: Announce and perform a server shutdown (Invoke Ragnarök)
+authors: [Kirastur]
+website: https://www.spigotmc.org/resources/ragnar%C3%B6k-shutdown.90733/
+
+api-version: 1.16
+load: POSTWORLD
+main: de.polarwolf.ragnarok.main.Main
+depend: [WorldEdit, WorldGuard, LibSequence]
+prefix: Ragnarök
+
+commands:
+    ragnarök:
+        description: Call Ragnarök, and the world will end (Servershutdown)
+        permission: ragnarök.command
+permissions:
+    ragnarök.command.*:
+        description: Can command ragnarök
+        children:
+            ragnarök.command: true
+            ragnarök.command.start: true
+            ragnarök.command.cancel: true
+            ragnarök.command.toggle: true
+            ragnarök.command.status: true
+            ragnarök.command.abort: true
+            ragnarök.command.reload: true
+            ragnarök.command.debugenable: true
+            ragnarök.command.debugdisable: true
+    ragnarök.command:
+        description: Can use the ragnarök command
+        default: op
+    ragnarök.command.start:
+        description: Can start a planned server shutdown
+        default: op
+    ragnarök.command.cancel:
+        description: Can cancel a planned server shutdown
+        default: op
+    ragnarök.command.toggle:
+        description: Can start and cancel a planned server shutdown
+        default: op
+    ragnarök.command.status:
+        description: Can query if a server shutdown is planned
+        default: op
+    ragnarök.command.abort:
+        description: Can abort a planned server shutdown ignoring authorization
+        default: op
+    ragnarök.command.reload:
+        description: Can reload the sequences from config
+        default: op
+    ragnarök.command.debugenable:
+        description: Can enable debug messages
+        default: op
+    ragnarök.command.debugdisable:
+        description: Can disable debug messages
+        default: op
+   
+    ragnarök.acolyte:
+        description: Should user be the Chosen One and able approve the Ragnarök invocation (Servershutdown)? 
+        default: false
+  
