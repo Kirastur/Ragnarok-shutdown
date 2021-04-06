@@ -2,6 +2,7 @@ package de.polarwolf.ragnarok.sequences;
 
 import java.util.Set;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import de.polarwolf.libsequence.main.LibSequenceProvider;
@@ -11,8 +12,10 @@ import de.polarwolf.libsequence.callback.LibSequenceCallbackGeneric;
 import de.polarwolf.libsequence.actions.LibSequenceAction;
 import de.polarwolf.libsequence.actions.LibSequenceActionResult;
 import de.polarwolf.libsequence.config.LibSequenceConfigResult;
+import de.polarwolf.libsequence.runnings.LibSequenceRunOptions;
 import de.polarwolf.libsequence.runnings.LibSequenceRunResult;
 import de.polarwolf.libsequence.runnings.LibSequenceRunningSequence;
+import de.polarwolf.ragnarok.config.RagnarokConfig;
 
 public class RagnarokSequence {
 	
@@ -20,14 +23,16 @@ public class RagnarokSequence {
 	public static final String SEQUENCENAME_CANCEL = "cancel";
 	
 	protected final Plugin plugin;
+	protected final RagnarokConfig ragnarokConfig;
 	protected final LibSequenceSequencer sqSequencer;
 
 	protected LibSequenceCallback sqCallback;
 	protected boolean isSectionInitialized = false;
 	
 	
-	public RagnarokSequence(Plugin plugin) {
+	public RagnarokSequence(Plugin plugin, RagnarokConfig ragnarokConfig) {
 		this.plugin=plugin;
+		this.ragnarokConfig=ragnarokConfig;
 		sqSequencer = LibSequenceProvider.getAPI().getSequencer();
 		sqCallback = new LibSequenceCallbackGeneric(plugin);
 	}
@@ -59,17 +64,16 @@ public class RagnarokSequence {
 		return !sqRunningSequences.isEmpty();
 	}
 	
-	public boolean isMySequence(LibSequenceRunningSequence sequence) {
-		Set<LibSequenceRunningSequence> sqRunningSequences = sqSequencer.queryRunningSequences(sqCallback);
-		return sqRunningSequences.contains(sequence);
-	}
-
-	public boolean startShutdownSequence() {
+	public boolean startShutdownSequence(CommandSender initiator) {
 		if (isSequenceRunning()) {
 			 plugin.getLogger().warning("Cannot start sequence - another sequence is already running");
 			return false;
 		}
-		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_SHUTDOWN, null);
+		LibSequenceRunOptions runOptions = new LibSequenceRunOptions();
+		runOptions.setSingleton(true);
+		runOptions.setInitiator(initiator);
+		runOptions.addAuthorizationKey(ragnarokConfig.getAuthorizationKey());
+		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_SHUTDOWN, runOptions);
 		if (sqRunResult.hasError()) {
 			 plugin.getLogger().warning(sqRunResult.toString());
 		 }
@@ -88,8 +92,10 @@ public class RagnarokSequence {
 		return !sqRunResult.hasError();
 	}
 
-	public boolean startCancelSequence() {
-		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_CANCEL, null);
+	public boolean startCancelSequence(CommandSender initiator) {
+		LibSequenceRunOptions runOptions = new LibSequenceRunOptions();
+		runOptions.setInitiator(initiator);
+		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_CANCEL, runOptions);
 		if (sqRunResult.hasError()) {
 			 plugin.getLogger().warning(sqRunResult.toString());
 		 }

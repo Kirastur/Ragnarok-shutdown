@@ -1,31 +1,37 @@
 package de.polarwolf.ragnarok.config;
 
+import java.util.UUID;
+
 import org.bukkit.plugin.Plugin;
 
 public class RagnarokConfig {
 	
 	protected String regionName;
 	protected String permissionName;
-	protected boolean actionsArePrivate;
 	protected boolean enableAPI;
 	protected boolean blockNewLogins = false;
 	protected boolean debug = false;
 
 	protected final Plugin plugin;
+	protected final String authorizationKey; 
  
 	public RagnarokConfig(Plugin plugin) {
 		this.plugin = plugin;
+		authorizationKey = UUID.randomUUID().toString();
 		loadConfig();
 	}
 	
 	public void loadConfig() {
 		plugin.saveDefaultConfig();
 		enableAPI = plugin.getConfig().getBoolean("general.enable-api");
-		actionsArePrivate = plugin.getConfig().getBoolean("general.actions-are-private");
 		regionName = plugin.getConfig().getString("protection.region");
 		permissionName = plugin.getConfig().getString("protection.permission");
 	}
 	
+	public String getAuthorizationKey() {
+		return authorizationKey;
+	}
+
 	public String getRegionName() {
 		return regionName;
 	}
@@ -36,10 +42,6 @@ public class RagnarokConfig {
 
 	public boolean isEnableAPI() {
 		return enableAPI;
-	}
-
-	public boolean isActionsArePrivate() {
-		return actionsArePrivate;
 	}
 
 	public boolean isBlockNewLogins() {

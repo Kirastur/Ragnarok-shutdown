@@ -23,12 +23,12 @@ public class RagnarokActionBlockNewLogins extends RagnarokAction {
 	}
 
 	@Override
-	public LibSequenceActionResult doAuthorizedExecute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep) {
+	public LibSequenceActionResult doExecute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep) {
 		if (blockingSequences.isEmpty()) {
 			ragnarokTools.blockNewLogins();
 		}
 		blockingSequences.add(sequence);
-    	return new LibSequenceActionResult(null, LSAERR_OK, null);
+    	return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_OK, null);
 	}
 	
 	protected void doEnd(LibSequenceRunningSequence sequence) {

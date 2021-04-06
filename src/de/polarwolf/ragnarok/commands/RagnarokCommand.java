@@ -60,7 +60,7 @@ public class RagnarokCommand implements CommandExecutor {
 	}
 
 	protected void cmdStart(CommandSender sender) {
-		if (ragnarokAPI.startShutdown()) {
+		if (ragnarokAPI.startShutdown(sender)) {
 			sender.sendMessage("Shutdown started");			
 		} else {
 			sender.sendMessage(MSG_ERR);
@@ -68,7 +68,7 @@ public class RagnarokCommand implements CommandExecutor {
 	}
 	
 	protected void cmdCancel(CommandSender sender) {
-		if (ragnarokAPI.cancelShutdown()) {
+		if (ragnarokAPI.cancelShutdown(sender)) {
 			sender.sendMessage("Cancel accepted");			
 		} else {
 			sender.sendMessage("MSG_ERR");
@@ -76,7 +76,7 @@ public class RagnarokCommand implements CommandExecutor {
 	}
 	
 	protected void cmdToogle(CommandSender sender) {
-		if (ragnarokAPI.toogleShutdown()) {
+		if (ragnarokAPI.toogleShutdown(sender)) {
 			sender.sendMessage(MSG_OK);			
 		} else {
 			sender.sendMessage(MSG_ERR);
@@ -92,7 +92,7 @@ public class RagnarokCommand implements CommandExecutor {
 	}
 	
 	protected void cmdAbort(CommandSender sender) {
-		if (ragnarokAPI.abortShutdown()) {
+		if (ragnarokAPI.abortShutdown(sender)) {
 			sender.sendMessage("Abort accepted");			
 		} else {
 			sender.sendMessage(MSG_ERR);

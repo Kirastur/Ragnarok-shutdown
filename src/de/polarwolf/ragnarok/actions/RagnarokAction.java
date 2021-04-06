@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 import de.polarwolf.libsequence.actions.LibSequenceAction;
 import de.polarwolf.libsequence.actions.LibSequenceActionResult;
 import de.polarwolf.libsequence.config.LibSequenceConfigStep;
+import de.polarwolf.libsequence.runnings.LibSequenceRunOptions;
 import de.polarwolf.libsequence.runnings.LibSequenceRunningSequence;
 import de.polarwolf.ragnarok.config.RagnarokConfig;
 import de.polarwolf.ragnarok.sequences.RagnarokSequence;
@@ -26,23 +27,17 @@ public abstract class RagnarokAction implements LibSequenceAction {
 		this.ragnarokSequence = ragnarokSequence;
 	}
 	
-	protected abstract LibSequenceActionResult doAuthorizedExecute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep);
-
 	@Override
 	public LibSequenceActionResult checkSyntax(LibSequenceConfigStep configStep) {
 		// The most actions here have no parameters
-    	return new LibSequenceActionResult(null, LSAERR_OK, null);
+    	return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_OK, null);
 	}
 	
 	@Override
-	public LibSequenceActionResult doExecute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep) {
-		if (ragnarokSequence.isMySequence(sequence) || !ragnarokConfig.isActionsArePrivate()) {
-			return doAuthorizedExecute(sequence, configStep);
-		} else {
-			return new LibSequenceActionResult(configStep.getActionName(), LSAERR_USER_DEFINED_ERROR, "Permission denied");
-		}
+	public boolean isAuthorized(LibSequenceRunOptions runOptions, LibSequenceConfigStep configStep) {
+		return runOptions.verifyAuthorizationKey(ragnarokConfig.getAuthorizationKey());
 	}
-
+	
 	@Override
 	public void onInit(LibSequenceRunningSequence sequence) {		
 	}
@@ -54,5 +49,5 @@ public abstract class RagnarokAction implements LibSequenceAction {
 	@Override
     public void onFinish(LibSequenceRunningSequence sequence) {
     }
-
+    
 }

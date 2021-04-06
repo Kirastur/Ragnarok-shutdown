@@ -1,5 +1,6 @@
 package de.polarwolf.ragnarok.api;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import de.polarwolf.ragnarok.config.RagnarokConfig;
@@ -24,44 +25,44 @@ public class RagnarokAPI {
 		return sequence.isSequenceRunning();
 	}
 	
-	public boolean startShutdown() {
+	public boolean startShutdown(CommandSender initiator) {
 		if (tools.isCommandAuthorized()) {
 			plugin.getLogger().info("Ragnarök was called ... be prepared");
-			return sequence.startShutdownSequence();
+			return sequence.startShutdownSequence(initiator);
 		}
 		return false;
 	}
 	
-	public boolean cancelShutdown() {
+	public boolean cancelShutdown(CommandSender initiator) {
 		if (tools.isCommandAuthorized()) {
 			plugin.getLogger().info("Ragnarök was send back to his bed");
 			Boolean cancelResult = sequence.cancelShutdownSequence();
 			if (cancelResult) {
-				return sequence.startCancelSequence();
+				return sequence.startCancelSequence(initiator);
 			}
 		}
 		return false;
 	}
 	
-	public boolean abortShutdown() {
+	public boolean abortShutdown(CommandSender initiator) {
 		plugin.getLogger().info("Ragnarök was forced back to his bed");
 		Boolean cancelResult = sequence.cancelShutdownSequence();
 		if (cancelResult) {
-			return sequence.startCancelSequence();
+			return sequence.startCancelSequence(initiator);
 		}
 		return false;
 	}
 
-	public boolean toogleShutdown() {
+	public boolean toogleShutdown(CommandSender initiator) {
 		if (isShutdownRunning()) {
-			return cancelShutdown();
+			return cancelShutdown(initiator);
 		} else {
-			return startShutdown();
+			return startShutdown(initiator);
 		}
 	}
 	
 	public boolean reload() {
-		plugin.reloadConfig();
+		// plugin reloadConfig() is done in LibSequence CallbackGeneric
 		return sequence.loadSequence();
 	}
 	

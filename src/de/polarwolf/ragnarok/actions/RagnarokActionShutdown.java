@@ -18,9 +18,9 @@ public class RagnarokActionShutdown extends RagnarokAction {
 	}
 
 	@Override
-	public LibSequenceActionResult doAuthorizedExecute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep) {
+	public LibSequenceActionResult doExecute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep) {
 		ragnarokTools.shutdownServer();
-    	return new LibSequenceActionResult(null, LSAERR_OK, null);
+    	return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_OK, null);
 	}
 
 }

@@ -20,7 +20,7 @@ public class RagnarokEventPlayer implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerLoginEvent evt) {
 		if (ragnarokConfig.isBlockNewLogins()) {
-			plugin.getLogger().info("Blocking player login");	
+			plugin.getLogger().info("Blocking player login: " + evt.getPlayer().getName());	
 			evt.disallow(PlayerLoginEvent.Result.KICK_OTHER, plugin.getServer().getShutdownMessage());
 		}
 	}

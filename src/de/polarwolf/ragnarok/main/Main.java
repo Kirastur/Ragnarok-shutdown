@@ -5,7 +5,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import de.polarwolf.ragnarok.actions.RagnarokActionBlockNewLogins;
 import de.polarwolf.ragnarok.actions.RagnarokActionKickall;
 import de.polarwolf.ragnarok.actions.RagnarokActionShutdown;
-import de.polarwolf.ragnarok.actions.RagnarokActionTitleBroadcast;
 import de.polarwolf.ragnarok.api.RagnarokAPI;
 import de.polarwolf.ragnarok.bstats.MetricsLite;
 import de.polarwolf.ragnarok.commands.RagnarokCommand;
@@ -27,8 +26,7 @@ public final class Main extends JavaPlugin {
 		RagnarokTools ragnarokTools = new RagnarokTools(this, ragnarokConfig);
 		
 		// Initialize Sequence
-		RagnarokSequence ragnarokSequence = new RagnarokSequence(this);
-		ragnarokSequence.registerAction("titlebroadcast", new RagnarokActionTitleBroadcast(this));
+		RagnarokSequence ragnarokSequence = new RagnarokSequence(this, ragnarokConfig);
 		ragnarokSequence.registerAction("block-new-logins", new RagnarokActionBlockNewLogins(this, ragnarokConfig, ragnarokTools, ragnarokSequence));
 		ragnarokSequence.registerAction("kickall", new RagnarokActionKickall(this, ragnarokConfig, ragnarokTools, ragnarokSequence));
 		ragnarokSequence.registerAction("shutdown", new RagnarokActionShutdown(this, ragnarokConfig, ragnarokTools, ragnarokSequence));

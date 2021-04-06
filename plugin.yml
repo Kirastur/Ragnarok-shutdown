@@ -1,8 +1,8 @@
 name: Ragnarok
-version: 1.1
+version: 1.2
 description: Announce and perform a server shutdown (Invoke Ragnarök)
 authors: [Kirastur]
-website: https://www.spigotmc.org/resources/ragnar%C3%B6k-shutdown.90733/
+website: https://www.spigotmc.org/resources/ragnar%C3%B6k-shutdown.90733
 
 api-version: 1.16
 load: POSTWORLD
@@ -58,4 +58,8 @@ permissions:
     ragnarök.acolyte:
         description: Should user be the Chosen One and able approve the Ragnarök invocation (Servershutdown)? 
         default: false
+
+    ragnarök.notify:
+        description: Should user be receive admin notications? 
+        default: op
   
