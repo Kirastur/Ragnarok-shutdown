@@ -34,4 +34,4 @@ Please see the Github Wiki.
 For support please contact us as discord https://discord.gg/MBJjqUHQHR
 
 ## Homepage
-comming soon
+https://www.spigotmc.org/resources/ragnar%C3%B6k-shutdown.90733
