@@ -39,7 +39,7 @@ sequences:
   shutdown:
     1: 
       action: notify
-      message: §4Player %USER% has initiated a server shutdown 
+      message: §4Player %NAME% has initiated a server shutdown 
       permission: ragnarök.notify
     2:
       action: command
@@ -75,7 +75,7 @@ sequences:
   cancel:
     1: 
       action: notify
-      message: §4Player %USER% has cancelled a server shutdown 
+      message: §4Player %NAME% has cancelled a server shutdown 
       permission: ragnarök.notify
     2:
       action: command
