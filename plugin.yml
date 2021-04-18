@@ -1,5 +1,5 @@
 name: Ragnarok
-version: 1.3
+version: 1.4
 description: Announce and perform a server shutdown (Invoke Ragnarök)
 authors: [Kirastur]
 website: https://www.spigotmc.org/resources/ragnar%C3%B6k-shutdown.90733
@@ -14,6 +14,7 @@ commands:
     ragnarök:
         description: Call Ragnarök, and the world will end (Servershutdown)
         permission: ragnarök.command
+        usage: "Query a list of valid subcommands by using: /ragnarök help"
 permissions:
     ragnarök.command.*:
         description: Can command ragnarök
@@ -25,8 +26,6 @@ permissions:
             ragnarök.command.status: true
             ragnarök.command.abort: true
             ragnarök.command.reload: true
-            ragnarök.command.debugenable: true
-            ragnarök.command.debugdisable: true
     ragnarök.command:
         description: Can use the ragnarök command
         default: op
@@ -47,12 +46,6 @@ permissions:
         default: op
     ragnarök.command.reload:
         description: Can reload the sequences from config
-        default: op
-    ragnarök.command.debugenable:
-        description: Can enable debug messages
-        default: op
-    ragnarök.command.debugdisable:
-        description: Can disable debug messages
         default: op
    
     ragnarök.acolyte:

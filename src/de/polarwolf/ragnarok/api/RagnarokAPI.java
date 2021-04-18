@@ -3,54 +3,42 @@ package de.polarwolf.ragnarok.api;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-import de.polarwolf.ragnarok.config.RagnarokConfig;
 import de.polarwolf.ragnarok.sequences.RagnarokSequence;
 import de.polarwolf.ragnarok.tools.RagnarokTools;
 
 public class RagnarokAPI {
 	
 	protected final Plugin plugin;
-	protected final RagnarokConfig config;
 	protected final RagnarokTools tools;
 	protected final RagnarokSequence sequence;
 	
-	public RagnarokAPI (Plugin plugin, RagnarokConfig config, RagnarokTools tools, RagnarokSequence sequence) {
+	public RagnarokAPI (Plugin plugin, RagnarokTools tools, RagnarokSequence sequence) {
 		this.plugin = plugin;
-		this.config = config;
 		this.tools = tools;
 		this.sequence = sequence;
 	}
 	
+	public boolean isReady() {
+		return sequence.isSectionReady();
+	}
+	
 	public boolean isShutdownRunning() {
-		return sequence.isSequenceRunning();
+		return sequence.isShutdownSequenceRunning();
 	}
 	
 	public boolean startShutdown(CommandSender initiator) {
-		if (tools.isCommandAuthorized()) {
-			plugin.getLogger().info("Ragnarök was called ... be prepared");
-			return sequence.startShutdownSequence(initiator);
+		if(!isReady()) {
+			return false;
 		}
-		return false;
+		return sequence.startShutdownSequence(initiator);
 	}
 	
 	public boolean cancelShutdown(CommandSender initiator) {
-		if (tools.isCommandAuthorized()) {
-			plugin.getLogger().info("Ragnarök was send back to his bed");
-			Boolean cancelResult = sequence.cancelShutdownSequence();
-			if (cancelResult) {
-				return sequence.startCancelSequence(initiator);
-			}
-		}
-		return false;
+		return sequence.cancelShutdownSequence(initiator);
 	}
 	
 	public boolean abortShutdown(CommandSender initiator) {
-		plugin.getLogger().info("Ragnarök was forced back to his bed");
-		Boolean cancelResult = sequence.cancelShutdownSequence();
-		if (cancelResult) {
-			return sequence.startCancelSequence(initiator);
-		}
-		return false;
+		return sequence.abortShutdownSequence(initiator);
 	}
 
 	public boolean toogleShutdown(CommandSender initiator) {
@@ -63,15 +51,7 @@ public class RagnarokAPI {
 	
 	public boolean reload() {
 		// plugin reloadConfig() is done in LibSequence CallbackGeneric
-		return sequence.loadSequence();
+		return sequence.loadSequences();
 	}
 	
-	public void debugEnable() {
-		config.setDebug(true);
-	}
-	
-	public void debugDisable() {
-		config.setDebug(false);
-	}
-
 }

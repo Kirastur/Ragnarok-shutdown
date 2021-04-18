@@ -7,14 +7,13 @@ import org.bukkit.plugin.Plugin;
 import de.polarwolf.libsequence.actions.LibSequenceActionResult;
 import de.polarwolf.libsequence.config.LibSequenceConfigStep;
 import de.polarwolf.libsequence.runnings.LibSequenceRunningSequence;
-import de.polarwolf.ragnarok.config.RagnarokConfig;
 import de.polarwolf.ragnarok.sequences.RagnarokSequence;
 import de.polarwolf.ragnarok.tools.RagnarokTools;
 
 public class RagnarokActionShutdown extends RagnarokAction {
 
-	public RagnarokActionShutdown(Plugin plugin, RagnarokConfig ragnarokConfig, RagnarokTools ragnarokTools, RagnarokSequence ragnarokSequence) {
-		super(plugin, ragnarokConfig, ragnarokTools, ragnarokSequence);
+	public RagnarokActionShutdown(Plugin plugin, RagnarokTools ragnarokTools, RagnarokSequence ragnarokSequence) {
+		super(plugin, ragnarokTools, ragnarokSequence);
 	}
 
 	@Override

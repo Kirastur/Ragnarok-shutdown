@@ -5,21 +5,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.Plugin;
 
-import de.polarwolf.ragnarok.config.RagnarokConfig;
+import de.polarwolf.ragnarok.tools.RagnarokTools;
 
 public class RagnarokEventPlayer implements Listener {
 	
 	protected final Plugin plugin;
-	protected final RagnarokConfig ragnarokConfig;
+	protected final RagnarokTools ragnarokTools;
 	
-	public RagnarokEventPlayer(Plugin plugin, RagnarokConfig ragnarokConfig) {
+	public RagnarokEventPlayer(Plugin plugin, RagnarokTools ragnarokTools) {
 		this.plugin = plugin;
-		this.ragnarokConfig = ragnarokConfig;
+		this.ragnarokTools = ragnarokTools;
 	}
 
 	@EventHandler
 	public void onPlayerJoin(PlayerLoginEvent evt) {
-		if (ragnarokConfig.isBlockNewLogins()) {
+		if (ragnarokTools.isBlockNewLogins()) {
 			plugin.getLogger().info("Blocking player login: " + evt.getPlayer().getName());	
 			evt.disallow(PlayerLoginEvent.Result.KICK_OTHER, plugin.getServer().getShutdownMessage());
 		}

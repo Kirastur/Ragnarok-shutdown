@@ -9,20 +9,17 @@ import de.polarwolf.libsequence.actions.LibSequenceActionResult;
 import de.polarwolf.libsequence.config.LibSequenceConfigStep;
 import de.polarwolf.libsequence.runnings.LibSequenceRunOptions;
 import de.polarwolf.libsequence.runnings.LibSequenceRunningSequence;
-import de.polarwolf.ragnarok.config.RagnarokConfig;
 import de.polarwolf.ragnarok.sequences.RagnarokSequence;
 import de.polarwolf.ragnarok.tools.RagnarokTools;
 
 public abstract class RagnarokAction implements LibSequenceAction {
 
 	protected final Plugin plugin;
-	protected final RagnarokConfig ragnarokConfig;
 	protected final RagnarokTools ragnarokTools;
 	protected final RagnarokSequence ragnarokSequence;
 	
-	protected RagnarokAction(Plugin plugin, RagnarokConfig ragnarokConfig, RagnarokTools ragnarokTools, RagnarokSequence ragnarokSequence) {
+	protected RagnarokAction(Plugin plugin, RagnarokTools ragnarokTools, RagnarokSequence ragnarokSequence) {
 		this.plugin = plugin;
-		this.ragnarokConfig = ragnarokConfig;
 		this.ragnarokTools = ragnarokTools;
 		this.ragnarokSequence = ragnarokSequence;
 	}
@@ -35,7 +32,7 @@ public abstract class RagnarokAction implements LibSequenceAction {
 	
 	@Override
 	public boolean isAuthorized(LibSequenceRunOptions runOptions, LibSequenceConfigStep configStep) {
-		return runOptions.verifyAuthorizationKey(ragnarokConfig.getAuthorizationKey());
+		return runOptions.verifyAuthorizationKey(ragnarokSequence.getAuthorizationKeyShutdown());
 	}
 	
 	@Override
