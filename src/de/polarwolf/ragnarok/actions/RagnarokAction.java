@@ -27,7 +27,7 @@ public abstract class RagnarokAction implements LibSequenceAction {
 	@Override
 	public LibSequenceActionResult checkSyntax(LibSequenceConfigStep configStep) {
 		// The most actions here have no parameters
-    	return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_OK, null);
+    	return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_OK, null, null);
 	}
 	
 	@Override

@@ -26,9 +26,9 @@ public class RagnarokActionCancel extends RagnarokAction{
 	public LibSequenceActionResult doExecute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep) {
 		boolean result = ragnarokSequence.doStopShutdownSequence();
 		if (result) {
-			return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_OK, null);
+			return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_OK, null, null);
 		} else {
-			return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_USER_DEFINED_ERROR, "Cannot cancel shutdown - the shutdown sequence is not running");
+			return new LibSequenceActionResult(configStep.getSequenceName(), configStep.getActionName(), LSAERR_USER_DEFINED_ERROR, "Cannot cancel shutdown - the shutdown sequence is not running", null);
 			
 		}
 	}
