@@ -50,7 +50,7 @@ sequences:
       check_permission: ragnarök.acolyte
 
     2: 
-      # Sebd a message to the server console
+      # Send a message to the server console
       action: info
       message: "Ragnarök was called ... be prepared"
 
@@ -61,6 +61,8 @@ sequences:
       message: "§4Player %NAME% has initiated a server shutdown" 
       message_de: "§4Spieler %NAME% hat einen Server-Shutdown gestartet" 
       include_permission: ragnarök.notify
+      include_operator: yes
+      include_console: yes
 
     4:
       # Send a Role-Play Message to all players
@@ -84,6 +86,7 @@ sequences:
       title: "The server will stop"
       subtitle: "in 30 seconds"
       stay: 100
+      include_all: yes
       wait-after-action: 10
 
     8:
@@ -123,6 +126,8 @@ sequences:
       message: "§4Player %NAME% has cancelled a server shutdown" 
       message_de: "§4Spieler %NAME% hat einen Server-Shutdown widerrufen" 
       include_permission: ragnarök.notify
+      include_operator: yes
+      include_console: yes
     4:
       action: command
       command: tellraw @a {"text":"Ragnarök went back to his bed", "color":"gold"}
@@ -140,6 +145,8 @@ sequences:
       message: "§4Administrator %NAME% has aborted a server shutdown" 
       message_de: "§4Administrator %NAME% hat den Server-Shutdown abgebrochen" 
       include_permission: ragnarök.notify
+      include_operator: yes
+      include_console: yes
     3:
       action: command
       command: tellraw @a {"text":"Ragnarök went back to his bed", "color":"gold"}
