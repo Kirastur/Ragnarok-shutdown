@@ -12,10 +12,10 @@ import de.polarwolf.libsequence.api.LibSequenceSequencer;
 import de.polarwolf.libsequence.callback.LibSequenceCallback;
 import de.polarwolf.libsequence.callback.LibSequenceCallbackGeneric;
 import de.polarwolf.libsequence.actions.LibSequenceAction;
-import de.polarwolf.libsequence.actions.LibSequenceActionResult;
-import de.polarwolf.libsequence.config.LibSequenceConfigResult;
+import de.polarwolf.libsequence.actions.LibSequenceActionException;
+import de.polarwolf.libsequence.config.LibSequenceConfigException;
+import de.polarwolf.libsequence.runnings.LibSequenceRunException;
 import de.polarwolf.libsequence.runnings.LibSequenceRunOptions;
-import de.polarwolf.libsequence.runnings.LibSequenceRunResult;
 import de.polarwolf.libsequence.runnings.LibSequenceRunningSequence;
 import de.polarwolf.ragnarok.tools.RagnarokTools;
 
@@ -45,27 +45,12 @@ public class RagnarokSequence {
 		sqCallback = new LibSequenceCallbackGeneric(plugin, ragnarokTools.isDebugOutput());
 	}
 	
-	public boolean registerAction(String actionName, LibSequenceAction action) {
-		 LibSequenceActionResult sqActionResult = sqSequencer.registerAction(actionName, action);
-		 if (sqActionResult.hasError()) {
-			 plugin.getLogger().warning(sqActionResult.toString());
-		 }
-		 return !sqActionResult.hasError();		
+	public void registerAction(String actionName, LibSequenceAction action) throws LibSequenceActionException {
+		 sqSequencer.registerAction(actionName, action);
 	}
 	
-	public boolean loadSequences() {
-		LibSequenceConfigResult sqConfigResult =  sqSequencer.loadSection(sqCallback);
-		 if (sqConfigResult.hasError()) {
-			 plugin.getLogger().warning(sqConfigResult.toString());
-			 return false;
-		 }
-		 if (!isSectionReady()) {
-			 plugin.getLogger().warning("At least one required sequence is missing");
-			 plugin.getLogger().warning("   shutdown - cancel - abort");
-			 plugin.getLogger().warning("Please fix your config or delete it to get a fresh default config");
-			 return false;
-		 }
-		return true;		
+	public void loadSequences() throws LibSequenceConfigException {
+		sqSequencer.loadSection(sqCallback);
 	}
 	
 	public String getAuthorizationKeyShutdown() {
@@ -75,6 +60,7 @@ public class RagnarokSequence {
 	public String getAuthorizationKeyCancel() {
 		return authorizationKeyCancel;
 	}
+	
 	public boolean isSectionReady() {
 		return (sqSequencer.hasOwnSequence(sqCallback, SEQUENCENAME_SHUTDOWN) &&
  				 sqSequencer.hasOwnSequence(sqCallback, SEQUENCENAME_CANCEL) &&
@@ -85,7 +71,7 @@ public class RagnarokSequence {
 	// We could held a local copy of the runningSequence, but this would be redundant
 	// So it's better to make a realtime query
 	public LibSequenceRunningSequence findRunningShutdownSequence() {
-		Set<LibSequenceRunningSequence> sqRunningSequences = sqSequencer.queryRunningSequences(sqCallback);
+		Set<LibSequenceRunningSequence> sqRunningSequences = sqSequencer.findRunningSequences(sqCallback);
 		Iterator<LibSequenceRunningSequence> iter = sqRunningSequences.iterator();
 		while (iter.hasNext()) {
 			LibSequenceRunningSequence runningSequence = iter.next();
@@ -101,59 +87,33 @@ public class RagnarokSequence {
 		
 	}
 
-	public boolean doStopShutdownSequence() {
+	public void stopShutdownSequence() {
 		LibSequenceRunningSequence runningSequence = findRunningShutdownSequence();
-		if (runningSequence == null) {
-			return false;
+		if (runningSequence != null) {
+			runningSequence.cancel();
 		}
-		runningSequence.cancel();
-		return true;		
 	}
 	
-	public boolean startShutdownSequence(CommandSender initiator) {
-		if (isShutdownSequenceRunning()) {
-			 plugin.getLogger().warning("Cannot start sequence - another sequence is already running");
-			return false;
-		}
+	public void startShutdownSequence(CommandSender initiator) throws LibSequenceRunException {
 		LibSequenceRunOptions runOptions = new LibSequenceRunOptions();
 		runOptions.setSingleton(true);
 		runOptions.setInitiator(initiator);
 		runOptions.addAuthorizationKey(getAuthorizationKeyShutdown());
-		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_SHUTDOWN, runOptions);
-		if (sqRunResult.hasError()) {
-			 plugin.getLogger().warning(sqRunResult.toString());
-		 }
-		return !sqRunResult.hasError();
+		sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_SHUTDOWN, runOptions);
 	}
 	
-	public boolean cancelShutdownSequence(CommandSender initiator) {
-		if (!isShutdownSequenceRunning()) {
-			 plugin.getLogger().warning("Cannot cancel sequence - the sequence is not running");
-			return false;
-		}
+	public void startCancelSequence(CommandSender initiator) throws LibSequenceRunException {
 		LibSequenceRunOptions runOptions = new LibSequenceRunOptions();
 		runOptions.setInitiator(initiator);
 		runOptions.addAuthorizationKey(getAuthorizationKeyCancel());
-		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_CANCEL, runOptions);
-		if (sqRunResult.hasError()) {
-			 plugin.getLogger().warning(sqRunResult.toString());
-		 }
-		return !sqRunResult.hasError();
+		sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_CANCEL, runOptions);
 	}
 
-	public boolean abortShutdownSequence(CommandSender initiator) {
-		if (!isShutdownSequenceRunning()) {
-			 plugin.getLogger().warning("Cannot abort sequence - the sequence is not running");
-			return false;
-		}
+	public void startAbortSequence(CommandSender initiator) throws LibSequenceRunException {
 		LibSequenceRunOptions runOptions = new LibSequenceRunOptions();
 		runOptions.setInitiator(initiator);
 		runOptions.addAuthorizationKey(getAuthorizationKeyCancel());
-		LibSequenceRunResult sqRunResult = sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_ABORT, runOptions);
-		if (sqRunResult.hasError()) {
-			 plugin.getLogger().warning(sqRunResult.toString());
-		 }
-		return !sqRunResult.hasError();
+		sqSequencer.executeOwnSequence(sqCallback, SEQUENCENAME_ABORT, runOptions);
 	}
 	
 }

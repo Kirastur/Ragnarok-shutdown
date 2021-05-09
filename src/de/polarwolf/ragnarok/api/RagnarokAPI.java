@@ -1,19 +1,17 @@
 package de.polarwolf.ragnarok.api;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
-
+import de.polarwolf.libsequence.config.LibSequenceConfigException;
+import de.polarwolf.libsequence.runnings.LibSequenceRunException;
 import de.polarwolf.ragnarok.sequences.RagnarokSequence;
 import de.polarwolf.ragnarok.tools.RagnarokTools;
 
 public class RagnarokAPI {
 	
-	protected final Plugin plugin;
 	protected final RagnarokTools tools;
 	protected final RagnarokSequence sequence;
 	
-	public RagnarokAPI (Plugin plugin, RagnarokTools tools, RagnarokSequence sequence) {
-		this.plugin = plugin;
+	public RagnarokAPI (RagnarokTools tools, RagnarokSequence sequence) {
 		this.tools = tools;
 		this.sequence = sequence;
 	}
@@ -26,32 +24,34 @@ public class RagnarokAPI {
 		return sequence.isShutdownSequenceRunning();
 	}
 	
-	public boolean startShutdown(CommandSender initiator) {
+	public boolean startShutdown(CommandSender initiator) throws LibSequenceRunException {
 		if(!isReady()) {
 			return false;
 		}
-		return sequence.startShutdownSequence(initiator);
+		sequence.startShutdownSequence(initiator);
+		return true;
 	}
 	
-	public boolean cancelShutdown(CommandSender initiator) {
-		return sequence.cancelShutdownSequence(initiator);
+	public void cancelShutdown(CommandSender initiator) throws LibSequenceRunException {
+		sequence.startCancelSequence(initiator);
 	}
 	
-	public boolean abortShutdown(CommandSender initiator) {
-		return sequence.abortShutdownSequence(initiator);
+	public void abortShutdown(CommandSender initiator) throws LibSequenceRunException {
+		sequence.startAbortSequence(initiator);
 	}
 
-	public boolean toogleShutdown(CommandSender initiator) {
+	public boolean toogleShutdown(CommandSender initiator) throws LibSequenceRunException {
 		if (isShutdownRunning()) {
-			return cancelShutdown(initiator);
+			cancelShutdown(initiator);
+			return true;
 		} else {
 			return startShutdown(initiator);
 		}
 	}
 	
-	public boolean reload() {
+	public void reload() throws LibSequenceConfigException {
 		// plugin reloadConfig() is done in LibSequence CallbackGeneric
-		return sequence.loadSequences();
+		sequence.loadSequences();
 	}
 	
 }

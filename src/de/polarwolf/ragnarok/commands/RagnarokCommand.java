@@ -6,12 +6,17 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import de.polarwolf.libsequence.config.LibSequenceConfigException;
+import de.polarwolf.libsequence.exception.LibSequenceException;
+import de.polarwolf.libsequence.runnings.LibSequenceRunException;
 import de.polarwolf.ragnarok.api.RagnarokAPI;
+import de.polarwolf.ragnarok.main.Main;
 
 public class RagnarokCommand implements CommandExecutor {
 	
 	protected static final String MSG_RELOAD_OK = "Ragnarök sequences successfully reloaded";
-	protected static final String MSG_ERROR = "Ragnarök is broken. Please call a viking to rapair.";
+	protected static final String MSG_ERROR = "Ragnarök is broken. Please call a viking to repair.";
 	protected static final String MSG_COMMING = "Ragnarök is comming";
 	protected static final String MSG_SLEEPING = "Ragnarök is sleeping";
 	protected static final String MSG_NO_PERMISSIONS = "You don't have any permissions here";
@@ -23,9 +28,11 @@ public class RagnarokCommand implements CommandExecutor {
 
 	protected static final String PERMISSION_PREFIX= "ragnarök.command";
 	
+	protected final Main main;
 	protected final RagnarokAPI ragnarokAPI;
 	
-	public RagnarokCommand (RagnarokAPI ragnarokAPI) {
+	public RagnarokCommand (Main main, RagnarokAPI ragnarokAPI) {
+		this.main = main;
 		this.ragnarokAPI = ragnarokAPI;
 	}
 	
@@ -63,7 +70,7 @@ public class RagnarokCommand implements CommandExecutor {
 		}
 	}
 
-	protected void cmdStart(CommandSender sender) {
+	protected void cmdStart(CommandSender sender) throws LibSequenceRunException {
 		if (ragnarokAPI.isShutdownRunning()) {
 			sender.sendMessage(MSG_IS_RUNNING);
 			return;
@@ -73,17 +80,15 @@ public class RagnarokCommand implements CommandExecutor {
 		}
 	}
 	
-	protected void cmdCancel(CommandSender sender) {
+	protected void cmdCancel(CommandSender sender) throws LibSequenceRunException {
 		if (!ragnarokAPI.isShutdownRunning()) {
 			sender.sendMessage(MSG_IS_NOT_RUNNING);
 			return;
 		}
-		if (!ragnarokAPI.cancelShutdown(sender)) {
-			sender.sendMessage(MSG_ERROR);
-		}
+		ragnarokAPI.cancelShutdown(sender);
 	}
 	
-	protected void cmdToogle(CommandSender sender) {
+	protected void cmdToogle(CommandSender sender) throws LibSequenceRunException {
 		if (!ragnarokAPI.toogleShutdown(sender)) {
 			sender.sendMessage(MSG_ERROR);
 		}
@@ -97,22 +102,55 @@ public class RagnarokCommand implements CommandExecutor {
 		}
 	}
 	
-	protected void cmdAbort(CommandSender sender) {
+	protected void cmdAbort(CommandSender sender) throws LibSequenceRunException {
 		if (!ragnarokAPI.isShutdownRunning()) {
 			sender.sendMessage(MSG_IS_NOT_RUNNING);
 			return;
 		}
-		if (!ragnarokAPI.abortShutdown(sender)) {
-			sender.sendMessage(MSG_ERROR);
-		}
+		ragnarokAPI.abortShutdown(sender);
 	}
 	
-	protected void cmdReload(CommandSender sender) {
-		if (ragnarokAPI.reload()) {
-			sender.sendMessage(MSG_RELOAD_OK);			
-		} else {
-			sender.sendMessage(MSG_ERROR);
+	protected void cmdReload(CommandSender sender) throws LibSequenceConfigException {
+		ragnarokAPI.reload();
+		sender.sendMessage(MSG_RELOAD_OK);			
+	}
+	
+	protected boolean dispatchCommand(CommandSender sender, String subCommand) {
+		try {
+			if (subCommand.equalsIgnoreCase("start")) {
+				cmdStart(sender);
+				return true;
+			}
+			if (subCommand.equalsIgnoreCase("cancel")) {
+				cmdCancel(sender);
+				return true;
+			}
+			if (subCommand.equalsIgnoreCase("toggle")) {
+				cmdToogle(sender);
+				return true;
+			}
+			if (subCommand.equalsIgnoreCase("status")) {
+				cmdStatus(sender);
+				return true;
+			}
+			if (subCommand.equalsIgnoreCase("abort")) {
+				cmdAbort(sender);
+				return true;
+			}
+			if (subCommand.equalsIgnoreCase("reload")) {
+				cmdReload(sender);
+				return true;
+			}
+			return false;
+		} catch (LibSequenceException e) {
+			sender.sendMessage(e.getTitle());
+			main.getLogger().warning(e.getMessageCascade());
+			if (e.hasJavaException()) {
+				e.printStackTrace();
+			}
 		}
+		
+		return true;		
 	}
 	
 	@Override
@@ -133,31 +171,8 @@ public class RagnarokCommand implements CommandExecutor {
 			sender.sendMessage(MSG_MISSING_PERMISSION);
 			return true;
 		}
-		if (subCommand.equalsIgnoreCase("start")) {
-			cmdStart(sender);
-			return true;
-		}
-		if (subCommand.equalsIgnoreCase("cancel")) {
-			cmdCancel(sender);
-			return true;
-		}
-		if (subCommand.equalsIgnoreCase("toggle")) {
-			cmdToogle(sender);
-			return true;
-		}
-		if (subCommand.equalsIgnoreCase("status")) {
-			cmdStatus(sender);
-			return true;
-		}
-		if (subCommand.equalsIgnoreCase("abort")) {
-			cmdAbort(sender);
-			return true;
-		}
-		if (subCommand.equalsIgnoreCase("reload")) {
-			cmdReload(sender);
-			return true;
-		}
-		return false;
+		
+		return dispatchCommand (sender, subCommand);
 	}
 
 }

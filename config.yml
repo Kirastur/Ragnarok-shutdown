@@ -1,10 +1,6 @@
 #
 # Welcome to the Ragnarök configuration settings
 #
-# Please contact us at discord if you have any questions
-#   https://discord.gg/MBJjqUHQHR
-#
-
 # - Per default, to lure out Ragnarök
 # - the player must stay inside the worldguard region and 
 # - must have the appropriate permission
@@ -22,6 +18,16 @@
 # - (tested with LuckPerms)
 # - The permission name also is hard coded in plugin.yml
 # - so please change it here only if you know what you are doing.
+# -
+# -
+# - Please see our Github Wiki for Documentation
+# -      https://github.com/Kirastur/Ragnarok-shutdown/wiki
+# -
+# - Visit our homepage for more information
+# -      https://www.spigotmc.org/resources/ragnar%C3%B6k-shutdown.90733
+# -
+# - For support you can contact us at discord.
+# -      A link to discord can be found on our homepage
 
 
 general:
@@ -58,8 +64,8 @@ sequences:
       # Notify all server-admins with notify-permission who has triggered the shutdown
       # As you can see, you can use color-formatting-tags and placeholders here 
       action: notify
-      message: "§4Player %NAME% has initiated a server shutdown" 
-      message_de: "§4Spieler %NAME% hat einen Server-Shutdown gestartet" 
+      message: "§cPlayer %NAME% has initiated a server shutdown" 
+      message_de: "§cSpieler %NAME% hat einen Server-Shutdown gestartet" 
       include_permission: ragnarök.notify
       include_operator: yes
       include_console: yes
@@ -123,8 +129,8 @@ sequences:
       action: cancelshutdown
     3: 
       action: notify
-      message: "§4Player %NAME% has cancelled a server shutdown" 
-      message_de: "§4Spieler %NAME% hat einen Server-Shutdown widerrufen" 
+      message: "§cPlayer %NAME% has cancelled a server shutdown" 
+      message_de: "§cSpieler %NAME% hat einen Server-Shutdown widerrufen" 
       include_permission: ragnarök.notify
       include_operator: yes
       include_console: yes
@@ -142,8 +148,8 @@ sequences:
       action: cancelshutdown
     2: 
       action: notify
-      message: "§4Administrator %NAME% has aborted a server shutdown" 
-      message_de: "§4Administrator %NAME% hat den Server-Shutdown abgebrochen" 
+      message: "§cAdministrator %NAME% has aborted a server shutdown" 
+      message_de: "§cAdministrator %NAME% hat den Server-Shutdown abgebrochen" 
       include_permission: ragnarök.notify
       include_operator: yes
       include_console: yes
