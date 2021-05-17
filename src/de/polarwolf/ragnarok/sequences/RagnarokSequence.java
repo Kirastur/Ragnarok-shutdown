@@ -9,7 +9,6 @@ import org.bukkit.plugin.Plugin;
 
 import de.polarwolf.libsequence.main.LibSequenceProvider;
 import de.polarwolf.libsequence.api.LibSequenceSequencer;
-import de.polarwolf.libsequence.callback.LibSequenceCallback;
 import de.polarwolf.libsequence.callback.LibSequenceCallbackGeneric;
 import de.polarwolf.libsequence.actions.LibSequenceAction;
 import de.polarwolf.libsequence.actions.LibSequenceActionException;
@@ -32,7 +31,7 @@ public class RagnarokSequence {
 	protected final RagnarokTools ragnarokTools;
 	protected final LibSequenceSequencer sqSequencer;
 
-	protected LibSequenceCallback sqCallback;
+	protected LibSequenceCallbackGeneric sqCallback;
 	protected boolean isSectionInitialized = false;
 	
 	
@@ -42,7 +41,9 @@ public class RagnarokSequence {
 		authorizationKeyShutdown = UUID.randomUUID().toString();
 		authorizationKeyCancel = UUID.randomUUID().toString();
 		sqSequencer = LibSequenceProvider.getAPI().getSequencer();
-		sqCallback = new LibSequenceCallbackGeneric(plugin, ragnarokTools.isDebugOutput());
+		sqCallback = new LibSequenceCallbackGeneric(plugin);
+		sqCallback.setEnableConsoleNotifications(ragnarokTools.isDebugOutput());
+		sqCallback.setEnableInitiatorNotifications(ragnarokTools.isDebugOutput());
 	}
 	
 	public void registerAction(String actionName, LibSequenceAction action) throws LibSequenceActionException {
