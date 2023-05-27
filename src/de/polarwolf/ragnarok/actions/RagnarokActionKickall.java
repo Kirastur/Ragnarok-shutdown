@@ -1,21 +1,19 @@
 package de.polarwolf.ragnarok.actions;
 
-import org.bukkit.plugin.Plugin;
-
 import de.polarwolf.libsequence.config.LibSequenceConfigStep;
 import de.polarwolf.libsequence.runnings.LibSequenceRunningSequence;
-import de.polarwolf.ragnarok.sequences.RagnarokSequence;
-import de.polarwolf.ragnarok.tools.RagnarokTools;
+import de.polarwolf.ragnarok.shutdown.RagnarokHelper;
 
 public class RagnarokActionKickall extends RagnarokAction {
 
-	public RagnarokActionKickall (Plugin plugin, RagnarokTools ragnarokTools, RagnarokSequence ragnarokSequence, String authorizationKey) {
-		super(plugin, ragnarokTools, ragnarokSequence, authorizationKey);
+	public RagnarokActionKickall(RagnarokHelper ragnarokHelper) {
+		super(ragnarokHelper);
 	}
 
 	@Override
 	public void execute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep) {
-		ragnarokTools.kickall();
+		if (!isDisabled())
+			getRagnarokHelper().kickall();
 	}
 
 }

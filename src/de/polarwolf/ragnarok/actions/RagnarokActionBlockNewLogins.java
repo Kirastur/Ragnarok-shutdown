@@ -1,36 +1,31 @@
 package de.polarwolf.ragnarok.actions;
 
-import org.bukkit.plugin.Plugin;
-
 import de.polarwolf.libsequence.config.LibSequenceConfigStep;
 import de.polarwolf.libsequence.runnings.LibSequenceRunningSequence;
-import de.polarwolf.ragnarok.sequences.RagnarokSequence;
-import de.polarwolf.ragnarok.tools.RagnarokTools;
+import de.polarwolf.ragnarok.shutdown.RagnarokHelper;
 
 public class RagnarokActionBlockNewLogins extends RagnarokAction {
-	
-	public RagnarokActionBlockNewLogins(Plugin plugin, RagnarokTools ragnarokTools, RagnarokSequence ragnarokSequence, String authorizationKey) {
-		super(plugin, ragnarokTools, ragnarokSequence, authorizationKey);
+
+	public RagnarokActionBlockNewLogins(RagnarokHelper ragnarokHelper) {
+		super(ragnarokHelper);
 	}
 
 	@Override
 	public void execute(LibSequenceRunningSequence sequence, LibSequenceConfigStep configStep) {
-		ragnarokTools.addBlockingSequence(sequence);
+		if (!isDisabled())
+			getRagnarokHelper().addBlockingSequence(sequence);
 	}
-	
-	protected void doEnd(LibSequenceRunningSequence sequence) {
-		ragnarokTools.removeBlockingSequence(sequence);
+
+	@Override
+	public void onCancel(LibSequenceRunningSequence sequence) {
+		if (!isDisabled())
+			getRagnarokHelper().removeBlockingSequence(sequence);
 	}
-	
+
 	@Override
-    public void onCancel(LibSequenceRunningSequence sequence) {
-		doEnd(sequence);
-    }
-    
-	@Override
-    public void onFinish(LibSequenceRunningSequence sequence) {
-		doEnd(sequence);
-    }
-	
+	public void onFinish(LibSequenceRunningSequence sequence) {
+		if (!isDisabled())
+			getRagnarokHelper().removeBlockingSequence(sequence);
+	}
 
 }

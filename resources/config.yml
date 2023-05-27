@@ -32,14 +32,16 @@
 
 general:
 
-  # Should Ragnarök exposes its API to other plugins
+  # Defines the way Ragnarök uses the LibSequence
   #
-  # - If enabled, other Plugins can get an API object by using
-  # -  "RagnarokAPI ragnarokAPI = RagnarokProvider.getAPI();"
-  enableAPI: false
-
+  # - Possible Values are
+  # -   none:    Don't initiate Ragnarök API
+  # -   shared:  Use the shared sequencer (the default instance of LibSequence)
+  # -   private: Create new instance of LibSequenc exclusive for Ragnarök
+  operationMode: shared
+  
   # Should Ragnarök print debug output to the server console
-  enableDebugOutput: false
+  enableDebug: false
   
   
 sequences:
